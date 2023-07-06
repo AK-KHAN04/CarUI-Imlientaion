@@ -8,7 +8,7 @@ public class ModeSelectioinHandler : MonoBehaviour
     public GameObject CarSelection, Select, MainMenu, ModeSelection;
     // Start is called before the first frame update
    
-    public void back()
+    public void Back()
     {
         ModeSelection.SetActive(false);
         MainMenu.SetActive(true);
@@ -29,6 +29,20 @@ public class ModeSelectioinHandler : MonoBehaviour
     public void SelectClick()
     {
         CarSelection.SetActive(false);
+        MainMenHandler.instance.LevelSelection.SetActive(true);
+    }
+
+    public void CityClick()
+    {
+        CarSelection.SetActive(false);
+        PlayerPrefs.SetString("mode", "city");
+        MainMenHandler.instance.LevelSelection.SetActive(true);
+    }
+
+    public void ParkingClick()
+    {
+        CarSelection.SetActive(false);
+        PlayerPrefs.SetString("mode", "parking");
         MainMenHandler.instance.LevelSelection.SetActive(true);
     }
 }

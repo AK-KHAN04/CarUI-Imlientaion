@@ -15,22 +15,34 @@ public class CarSelectionHandler : MonoBehaviour
     private void Start()
     {
         cars[curr].SetActive(true);
-        max_cars = cars.Length;
+        max_cars = cars.Length-1;
+        PlayerPrefs.SetInt("SelectedCar", curr);
+
+
+        if (curr >= max_cars)
+        {
+            next.interactable = false;
+        }
+        else if(curr <= 0)
+        {
+            prev.interactable = false;
+        }
+        
     }
 
-    public void back()
+    public void Back()
     {
         Carselection.SetActive(false);
         MainMenHandler.instance.LevelSelection.SetActive(true);
     }
 
-    public void cashClick()
+    public void CashClick()
     {
         Carselection.SetActive(false);
         CashStore.SetActive(true);
     }
 
-    public void storeClick()
+    public void StoreClick()
     {
         Carselection.SetActive(false);
         CashStore.SetActive(true);
@@ -51,15 +63,35 @@ public class CarSelectionHandler : MonoBehaviour
         curr++;
         cars[curr].SetActive(true);
 
-        if( curr == 5)
+        if( curr >= max_cars)
         {
             next.interactable = false;
         }
+        else if(curr >= 0)
+        {
+            prev.interactable = true;
+        }
+        PlayerPrefs.SetInt("SelectedCar", curr);
+        Debug.Log(PlayerPrefs.GetInt("SelectedCar"));
     }
 
     public void Previous()
     {
+        cars[curr].SetActive(false);
+        curr--;
+        cars[curr].SetActive(true);
+
+        if (curr == 0)
+        {
+            prev.interactable = false;
+        }
+        else if(curr <= max_cars)
+        {
+            next.interactable = true;
+        }
+        PlayerPrefs.SetInt("SelectedCar", curr);
+        Debug.Log(PlayerPrefs.GetInt("SelectedCar"));
 
     }
-    
+
 }
