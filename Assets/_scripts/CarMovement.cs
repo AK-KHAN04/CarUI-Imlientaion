@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class CarMovement : MonoBehaviour
@@ -9,13 +10,14 @@ public class CarMovement : MonoBehaviour
     public Transform car;
     public float speed = 10;
     public Button accerlerator, brake;
+    public GameObject steering;
+    public float i;
+    public GameObject frontWheel1, frontWheel2;
 
     private bool acceratordown;
     private bool brakeDown;
 
-    public GameObject steering;
-
-  
+    public GameObject Lights;
 
     Vector3 rotationRight = new Vector3(0, 30, 0);
     Vector3 rotationLeft = new Vector3(0, -30, 0);
@@ -23,9 +25,11 @@ public class CarMovement : MonoBehaviour
     Vector3 forward = new Vector3(0, 0, 1);
     Vector3 backward = new Vector3(0, 0, -1);
 
+
     private void Start()
     {
-       
+        frontWheel1.transform.localRotation = Quaternion.Euler(0, 0, 0);
+        frontWheel2.transform.localRotation = Quaternion.Euler(0, 0, 0);
     }
 
     private void Update()
@@ -37,6 +41,8 @@ public class CarMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        i = steering.GetComponent<SteeringWheel>().OutPut;
+
         if (Input.GetKey("w") || acceratordown)
         {
             forwardMove();
@@ -46,15 +52,30 @@ public class CarMovement : MonoBehaviour
             BackwardMove();
         }
 
-        if (Input.GetKey("d"))
+        if (Input.GetKey(KeyCode.A))
         {
-            RotateRight();
+          //  i = -1;
         }
 
-        if (Input.GetKey("a"))
+        if (Input.GetKey((KeyCode.A)) || i<0)
         {
             RotateLeft();
-        }  
+            frontWheel1.transform.localRotation = Quaternion.Euler(0, -30, 0);
+            frontWheel2.transform.localRotation = Quaternion.Euler(0, -30, 0);
+        }
+
+        else if (Input.GetKey("d") || i > 0)
+        {
+            
+            RotateRight();
+            frontWheel1.transform.localRotation = Quaternion.Euler(0, 30, 0);
+            frontWheel2.transform.localRotation = Quaternion.Euler(0, 30, 0);
+        }
+        else
+        {
+            frontWheel1.transform.localRotation = Quaternion.Euler(0, 0, 0);
+            frontWheel2.transform.localRotation = Quaternion.Euler(0, 0, 0);
+        }
     }
 
    
@@ -74,7 +95,6 @@ public class CarMovement : MonoBehaviour
     {
         Quaternion deltaRotationLeft = Quaternion.Euler(rotationLeft * Time.deltaTime);
         rb.MoveRotation(rb.rotation * deltaRotationLeft);
-        steering.transform.rotation = Quaternion.Euler(0, 0, 10);
     }
 
     public void RotateRight()
@@ -103,4 +123,9 @@ public class CarMovement : MonoBehaviour
         brakeDown = true;
     }
 
+
+    public void Rotate()
+    {
+
+    }
 }
